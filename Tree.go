@@ -131,3 +131,58 @@ func expandBinaryTree(root *TreeNode) *TreeNode {
 	}
 	return root
 }
+
+func levelOrder(root *TreeNode) [][]int {
+	if root == nil {
+		return [][]int{}
+	}
+	var result [][]int
+	var queue []*TreeNode
+	queue = append(queue, root)
+	for len(queue) > 0 {
+		var level []int
+		var next []*TreeNode
+		for _, node := range queue {
+			level = append(level, node.Val)
+			if node.Left != nil {
+				next = append(next, node.Left)
+			}
+			if node.Right != nil {
+				next = append(next, node.Right)
+			}
+		}
+		result = append(result, level)
+		queue = next
+	}
+	return result
+}
+
+func checkTree(root *TreeNode) bool {
+	return root.Val == root.Left.Val+root.Right.Val
+}
+
+func sumOfLeftLeaves(root *TreeNode) int {
+	if root == nil {
+		return 0
+	}
+	if root.Left != nil && root.Left.Left == nil && root.Left.Right == nil {
+		return root.Left.Val + sumOfLeftLeaves(root.Right)
+	}
+	return sumOfLeftLeaves(root.Left) + sumOfLeftLeaves(root.Right)
+}
+
+func sumNumbers(root *TreeNode) int {
+	if root == nil {
+		return 0
+	}
+	if root.Left == nil && root.Right == nil {
+		return root.Val
+	}
+	if root.Left != nil {
+		root.Left.Val += root.Val * 10
+	}
+	if root.Right != nil {
+		root.Right.Val += root.Val * 10
+	}
+	return sumNumbers(root.Left) + sumNumbers(root.Right)
+}
